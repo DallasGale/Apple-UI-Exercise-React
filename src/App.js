@@ -1,25 +1,145 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import Nav from "./components/nav/nav.component";
+import "./App.scss";
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      activeIndex: 1,
+      activeClick: false,
+      firstLinkActive: true,
+      linePosition: 0,
+      lineWidth: 0,
+      navigation: [],
+      transitionFx: null
+    }
+    this.refCallBack = this.refCallBack.bind(this);
+    this.toggleActiveClass= this.toggleActiveClass.bind(this);
+  }
+
+  refCallBack(el) {
+    if (el) {
+      let rect = el.getBoundingClientRect();
+      this.setState({
+        linePosition: Math.round(rect.left) + 'px',
+        lineWidth: Math.round(rect.width) + 'px'
+      })
+    }
+  }
+
+
+  toggleActiveClass(index, e) {
+    e.preventDefault();
+      let active = e.target;
+      let rect = active.getBoundingClientRect();
+
+      this.setState({
+        activeIndex: index,
+        activeClick: !this.state.activeClick,
+        firstLinkActive: false,
+        linePosition: rect.left,
+        lineWidth: rect.width,
+        transitionFx: true,
+      });
+  }
+
+  responsiveUpdate = () => {
+      let activeLink = document.getElementsByClassName('active');
+      for (let i = 0; i < activeLink.length; i++) {
+
+        let responsiveRect = activeLink[i].getBoundingClientRect();
+
+        this.setState({
+          linePosition: Math.round(responsiveRect.left),
+          lineWidth: Math.round(responsiveRect.width),
+          transitionFx: false,
+        })
+      }
+    }
+
+  
+  componentDidMount() {
+      window.addEventListener('resize', this.responsiveUpdate);
+      this._getData();
+  }
+
+  
+
+   // -------------------Fetch Navigation Data-------------------
+  _getData = () => {
+    fetch('https://raw.githubusercontent.com/dgale1983/Apple-UI-Exercise-static/master/dist/navigation.json')
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+       let navigation = data.cities.map(city => city);
+       this.setState({
+         navigation: navigation
+       })
+     });
+     
+ }
+
+
   render() {
+
+    let iterator = 1;
+    let cities = this.state.navigation;
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="content">
+        <Nav>
+          <ul id="nav-list" className="nav-list">
+          {
+            cities.slice(0,1).map(c => {
+              return (
+                <li key={c.section } className="nav-list__items">
+                    <a 
+                      onClick={this.toggleActiveClass.bind(this, iterator)}
+                      ref={this.refCallBack} 
+                      id={ c.section } 
+                      className={`nav-list__items-link ${this.state.firstLinkActive ? 'active' : ''}`}
+                      href={`#${c.section}`}
+                      tabIndex={ iterator++ }>
+                        { c.label }
+                    </a>
+                </li>
+              )
+            }
+            )
+          }
+          {
+            cities.slice(1).map(c => {
+              return (
+                  <li key={c.section} className="nav-list__items">
+                      <a 
+                        onClick={this.toggleActiveClass.bind(this, iterator)}
+                        id={ c.section } 
+                        className={`nav-list__items-link
+                          ${this.state.activeIndex === iterator ? 'active' : ''}`
+                        } 
+                        href={`#${c.section}`}
+                        tabIndex={ iterator++ }>
+                          { c.label }
+                      </a>
+                  </li>
+                
+              )
+            })
+          }
+            <div id='active-nav-line' 
+              className={`active-nav-line ${this.state.transitionFx ? 'setLineTransition' : '' }`} 
+              style={{
+                width: this.state.lineWidth,
+                left: this.state.linePosition,
+              }}>
+
+            </div>
+          </ul>
+        </Nav>
       </div>
     );
   }

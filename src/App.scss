@@ -1,0 +1,81 @@
+
+@import './breakpoints';
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
+  margin: 0;
+  @include respond-to(phone-down) {
+    font-size: 10px;
+  }
+}
+a {
+  text-decoration: none;
+  color: rgb(187, 187, 187);
+  transition: all 0.2s;
+
+  &:hover {
+    color: rgb(110, 161, 238);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  &:active {
+    color: rgb(82, 82, 82);
+  }
+
+  &:focus {
+    outline: none;
+    color: rgb(82, 82, 82);
+  }
+}
+
+.active {
+  text-decoration: none;
+  color: rgb(82, 82, 82);
+}
+
+.content {
+  padding-top: 20px;
+}
+
+.nav {
+  border-bottom: 1px solid rgb(224, 224, 224);
+  position: relative;
+  
+  &-list {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    padding-left: 0;
+    text-align: center;
+    list-style: none;
+    
+    &__items {
+      display: inline-block;
+      width: auto;   
+      padding: 0.5em 3em;
+
+      @include respond-to(tablet-down) {
+        padding: 0.5em 1em;
+      }
+
+      @include respond-to(phone-down) {
+        padding: 0.5em 0.5em;
+      }
+    }
+  }
+}
+
+
+.active-nav-line {
+  background: black;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 0;
+  height: 1px;
+}
+
+.setLineTransition {
+  transition: all 0.3s;
+}
