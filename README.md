@@ -1,4 +1,4 @@
-# Apple code challenge - UI Exercise using React
+# Apple code challenge - UI exercise using React
 
 Completed UI example of a minimilist navigation bar with active states & magic-line.
 
