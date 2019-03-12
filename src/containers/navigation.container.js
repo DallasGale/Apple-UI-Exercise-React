@@ -10,6 +10,9 @@ class Navigation extends Component {
     this.state = {
       activeIndex: 1,
       activeClick: false,
+      errorMessage: null,
+      errorStatus: null,
+      fetchApi: false,
       firstLinkActive: true,
       linePosition: 0,
       lineWidth: 0,
@@ -75,11 +78,12 @@ class Navigation extends Component {
   _getData = () => {
     fetch(API)
       .then(res => {
-        if (res.status === 200) {
+        console.log(res.status);
+        if (res.ok) {
           return res.json();
         }
         else {
-          console.error(`There was an issue resolving the API. Status Text: ${res.statusText}`);
+          return;
         }
       })
       .then(data => {
@@ -87,6 +91,16 @@ class Navigation extends Component {
         this.setState({
           navigation: navigation
         })
+    })
+    .catch(error => {
+      let erroMsg = `There was an issue resolving the API.`;
+      let errorStatus = error;
+      this.setState({
+        fetchApi: true,
+        errorMessage: erroMsg,
+        errorStatus: errorStatus,
+      })
+      console.log(erroMsg + errorStatus);
     });  
   }
 
@@ -96,55 +110,65 @@ class Navigation extends Component {
 
     return (
       <div className="content">
-        <Nav>
-          <ul id="nav-list" className="nav-list">
-          {
-            cities.slice(0,1).map(c => {
-              return (
-                <li key={c.section } className="nav-list__items">
-                    <a 
-                      onClick={this.toggleActiveClass.bind(this, iterator)}
-                      ref={this.refCallBack} 
-                      id={ c.section } 
-                      className={`nav-list__items-link ${this.state.firstLinkActive ? 'active' : ''}`}
-                      href={`#${c.section}`}
-                      tabIndex={ iterator++ }>
-                        { c.label }
-                    </a>
-                </li>
-              )
-            }
-            )
-          }
-          {
-            cities.slice(1).map(c => {
-              return (
-                  <li key={c.section} className="nav-list__items">
+
+        { !this.state.fetchApi ? (
+          <Nav>
+            <ul id="nav-list" className="nav-list">
+            {
+              cities.slice(0,1).map(c => {
+                return (
+                  <li key={c.section } className="nav-list__items">
                       <a 
                         onClick={this.toggleActiveClass.bind(this, iterator)}
+                        ref={this.refCallBack} 
                         id={ c.section } 
-                        className={`nav-list__items-link
-                          ${this.state.activeIndex === iterator ? 'active' : ''}`
-                        } 
+                        className={`nav-list__items-link ${this.state.firstLinkActive ? 'active' : ''}`}
                         href={`#${c.section}`}
                         tabIndex={ iterator++ }>
                           { c.label }
                       </a>
                   </li>
-                
+                )
+              }
               )
-            })
-          }
-            <div id='active-nav-line' 
-              className={`active-nav-line ${this.state.transitionFx ? 'setLineTransition' : '' }`} 
-              style={{
-                width: this.state.lineWidth,
-                left: this.state.linePosition,
-              }}>
+            }
+            {
+              cities.slice(1).map(c => {
+                return (
+                    <li key={c.section} className="nav-list__items">
+                        <a 
+                          onClick={this.toggleActiveClass.bind(this, iterator)}
+                          id={ c.section } 
+                          className={`nav-list__items-link
+                            ${this.state.activeIndex === iterator ? 'active' : ''}`
+                          } 
+                          href={`#${c.section}`}
+                          tabIndex={ iterator++ }>
+                            { c.label }
+                        </a>
+                    </li>
+                  
+                )
+              })
+            }
+              <div id='active-nav-line' 
+                className={`active-nav-line ${this.state.transitionFx ? 'setLineTransition' : '' }`} 
+                style={{
+                  width: this.state.lineWidth,
+                  left: this.state.linePosition,
+                }}>
 
+              </div>
+            </ul>
+          </Nav> 
+          ) : (
+          <div>
+            <div className='error'>
+                { this.state.errorMessage + this.state.errorStatus }
             </div>
-          </ul>
-        </Nav>
+          </div>
+          )
+        }
       </div>
     );
   }
