@@ -1,0 +1,14 @@
+@import '../../breakpoints';
+
+.c-digits {
+    background: black;
+    position: relative;
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+    border: 2px solid white;
+    @include respond-to(phone-down) {
+        font-size: 0.8em;
+        padding: 1em 0;
+    }
+}

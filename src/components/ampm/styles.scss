@@ -1,0 +1,10 @@
+@import '../../breakpoints';
+
+.c-amPm {
+    background: orangered;
+    color: white;
+    @include respond-to(phone-down) {
+        font-size: 0.8em;
+        padding: 1em 0;
+    }
+}

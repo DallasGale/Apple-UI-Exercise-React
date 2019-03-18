@@ -1,0 +1,52 @@
+@import '../../breakpoints';
+
+.c-currentTime {
+    color: rgb(182, 182, 182);
+    font-size: 2.5rem;
+    font-weight: 100;
+    height: auto;
+    display: block;
+    text-align: center;
+    position: relative;
+    padding: 3em 1em;
+
+    @include respond-to(phone-down) {
+        font-size: 1em;
+    }
+
+    &__city {
+        color: black;
+        font-size: 3em;
+        font-weight: bold;
+    }
+
+    &__time {
+        color: white;
+        font-size: 2em;
+        font-weight: 100;
+        width: 100%;
+        max-width: 700px;
+        margin: 0.5em auto;
+        padding: 0 0.2em;
+        position: relative;
+    }
+
+    &__digits {
+        display: inline-block;
+        width: 25%;
+
+        &--amPm {
+            background: orangered;
+            color: white;
+        }
+    }
+
+    &__amPm {
+        background: white;
+        color: black;
+        position: relative;
+        width: 200px;
+        display: inline-block;
+        text-align: center;
+    }
+}
