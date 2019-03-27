@@ -34,7 +34,7 @@ class WorldClock extends Component {
       errorStatus: null,
       fetchApi: false,
       firstLinkActive: true,
-      hours: date.getUTCHours() - 8,
+      hours: date.getUTCHours() - 7,
       linePosition: 0,
       lineWidth: 0,
       minutes: new Date().getUTCMinutes(),
@@ -105,7 +105,7 @@ class WorldClock extends Component {
     let amPm = '';
     let hourUtc = new Date().getUTCHours();
     let hourUpdated = 0;
-    let timeZones = { eastern: 4, pacific: 8, gmt: 0, cet: 1, jst: 9, hkt: 8, aest: 11 };
+    let timeZones = { eastern: 4, pacific: 7, gmt: 0, cet: 1, jst: 9, hkt: 8, aest: 11 };
 
 
     switch (city) {
@@ -180,6 +180,10 @@ class WorldClock extends Component {
 
       case 33:
         hourUpdated = 9
+        break;
+
+      case 34:
+        hourUpdated = 10
         break;
 
       default: 
